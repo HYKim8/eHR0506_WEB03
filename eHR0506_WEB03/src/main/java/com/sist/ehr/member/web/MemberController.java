@@ -77,6 +77,8 @@ public class MemberController {
 		//Jquery PageNation
 		model.addAttribute("maxPageNo", maxPageNo);
 		
+		//Jquery PageNation:pageNum
+		model.addAttribute("pageNum", search.getPageNum());		
 		//member/member_mng  -> /+member/member_mng+.jsp
 		return "member/member_mng";
 	}

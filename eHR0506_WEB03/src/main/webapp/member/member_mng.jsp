@@ -19,7 +19,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <c:set var="hContext" value="${pageContext.request.contextPath }"></c:set>
-
+<c:if test="${maxPageNo == null}"><c:set var="maxPageNo" value="1"></c:set></c:if>
+<c:if test="${pageNum == null}"><c:set var="pageNum" value="1"></c:set></c:if>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -160,7 +161,7 @@
 
         function doSearchPage(pageNum) {
             //console.log("doRetrieve");
-            alert("pageNum:"+pageNum);  
+            //alert("pageNum:"+pageNum);  
             var frm = document.member_frm;
             frm.pageNum.value = pageNum;
             frm.action = "${hContext}/member/do_retrieve.do";
@@ -175,11 +176,10 @@
 			}
 		});
 
-		//((maxNum - 1) / rowPerPage) + 1
         $('#page-selection').bootpag({
-            total: ${maxPageNo},   <!-- total pages -->
-            page: 1,            <!-- current page -->
-            maxVisible: 10,       <!-- Links per page -->
+            total:${maxPageNo},       <!-- total pages -->
+            page: ${pageNum},  <!-- current page -->
+            maxVisible: 5,            <!-- Links per page -->
             leaps: true,
             firstLastUse: true,
             first: '←',

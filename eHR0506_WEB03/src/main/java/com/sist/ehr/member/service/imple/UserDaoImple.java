@@ -294,7 +294,8 @@ public class UserDaoImple implements UserDao {
 		sb.append("            --검색조건                                                                               \n");
 		//--검색----------------------------------------------------------------------
 		sb.append(whereSb.toString());
-		//--검색----------------------------------------------------------------------				
+		//--검색----------------------------------------------------------------------			
+		sb.append("            Order by reg_dt desc                              \n");
 		sb.append("        )A --10                                               \n");
 		//sb.append("        WHERE ROWNUM <= (&PAGE_SIZE*(&PAGE_NUM-1)+&PAGE_SIZE) \n");
 		sb.append("        WHERE ROWNUM <= (?*(?-1)+?) \n");
