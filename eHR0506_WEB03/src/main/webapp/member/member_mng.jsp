@@ -30,6 +30,7 @@
 <!-- 위 3개의 메타 태그는 *반드시* head 태그의 처음에 와야합니다; 어떤 다른 콘텐츠들은 반드시 이 태그들 *다음에* 와야 합니다 -->
 <title>회원관리</title>
 
+<!-- 파비콘-->
 <link rel="shortcut icon" type="image/x-icon"
 	href="${hContext}/resources/img/main/favicon.ico">
 <!-- 부트스트랩 -->
@@ -57,30 +58,31 @@
 				<form action="${hContext}/member/do_retrieve.do" name="member_frm"
 					method="get" class="form-inline">
 					<!-- pageNum -->
-					<input type="hidden" name="pageNum" id="pageNum" value="${param.pageNum }">
+					<input type="hidden" name="pageNum" id="pageNum"
+						value="${param.pageNum }">
 					<div class="form-group">
 						<select name="pageSize" id="pageSize"
 							class="form-control input-sm">
 							<option value="10"
-							    <c:if test="${param.pageSize == '10' }"> selected="selected"</c:if> >10
-							</option> 
-							<option value="20" 
-							    <c:if test="${param.pageSize == '20' }"> selected="selected"</c:if> >20
+								<c:if test="${param.pageSize == '10' }"> selected="selected"</c:if>>10
 							</option>
-							<option value="50" 
-							     <c:if test="${param.pageSize == '50' }"> selected="selected"</c:if> >50
+							<option value="20"
+								<c:if test="${param.pageSize == '20' }"> selected="selected"</c:if>>20
 							</option>
-							<option value="100" 
-							     <c:if test="${param.pageSize == '100' }"> selected="selected"</c:if> >100
+							<option value="50"
+								<c:if test="${param.pageSize == '50' }"> selected="selected"</c:if>>50
+							</option>
+							<option value="100"
+								<c:if test="${param.pageSize == '100' }"> selected="selected"</c:if>>100
 							</option>
 						</select> <select name="searchDiv" id="searchDiv"
 							class="form-control input-sm">
 							<option value="">전체</option>
-							<option value="10" 
-							    <c:if test="${param.searchDiv == '10' }"> selected="selected"</c:if>  >ID
+							<option value="10"
+								<c:if test="${param.searchDiv == '10' }"> selected="selected"</c:if>>ID
 							</option>
-							<option value="20" 
-							     <c:if test="${param.searchDiv == '20' }"> selected="selected"</c:if>  >이름
+							<option value="20"
+								<c:if test="${param.searchDiv == '20' }"> selected="selected"</c:if>>이름
 							</option>
 						</select> <input type="text" class="form-control input-sm" id="searchWord"
 							name="searchWord" value="${param.searchWord }" placeholder="검색어">
@@ -133,17 +135,8 @@
 		</div>
 		<!--// Grid영역 -->
 		<!-- pagenation -->
-		<div class="text-center">
-			<ul class="pagination">
-				<li><a href="#">&lt;</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li><a href="#">&gt;</a></li>
-			</ul>
-		</div>
+        <div id="content"></div>
+        <div class="text-center" id="page-selection"></div>
 		<!--// pagenation -->
 	</div>
 	<!--// div container -->
@@ -153,9 +146,8 @@
 	<!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
 	<script src="${hContext}/resources/js/jquery-migrate-1.4.1.js"></script>
 	<!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
-	<script src="${hContext}/resources/js/bootstrap.min.js">
-		
-	</script>
+	<script src="${hContext}/resources/js/bootstrap.min.js"></script>
+	<script src="${hContext}/resources/js/jquery.bootpag.min.js"></script>
 
 	<script type="text/javascript">
 		function doRetrieve() {
@@ -166,13 +158,43 @@
 			frm.submit();
 		}
 
+        function doSearchPage(pageNum) {
+            //console.log("doRetrieve");
+            alert("pageNum:"+pageNum);  
+            var frm = document.member_frm;
+            frm.pageNum.value = pageNum;
+            frm.action = "${hContext}/member/do_retrieve.do";
+            frm.submit();
+        }
+        		
 		$("#searchWord").on("keydown", function(key) {
 
-			console.log("searchWord keydown:" + key.keyCode);
+			//console.log("searchWord keydown:" + key.keyCode);
 			if (key.keyCode == 13) {
 				doRetrieve();
 			}
 		});
+
+		//((maxNum - 1) / rowPerPage) + 1
+        $('#page-selection').bootpag({
+            total: ${maxPageNo},   <!-- total pages -->
+            page: 1,            <!-- current page -->
+            maxVisible: 10,       <!-- Links per page -->
+            leaps: true,
+            firstLastUse: true,
+            first: '←',
+            last: '→',
+            wrapClass: 'pagination',
+            activeClass: 'active',
+            disabledClass: 'disabled',
+            nextClass: 'next',
+            prevClass: 'prev',
+            lastClass: 'last',
+            firstClass: 'first'
+        }).on("page", function(event, num){
+            $("#pageNum").val(num); // or some ajax content loading...
+            doSearchPage(num);
+        });        		
 	</script>
 </body>
 </html>

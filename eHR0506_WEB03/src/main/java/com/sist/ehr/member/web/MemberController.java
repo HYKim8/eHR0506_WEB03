@@ -74,7 +74,7 @@ public class MemberController {
 		model.addAttribute("totalCnt", totalCnt);
 		
 		int maxPageNo = ((totalCnt - 1) / 10) + 1;
-		
+		//Jquery PageNation
 		model.addAttribute("maxPageNo", maxPageNo);
 		
 		//member/member_mng  -> /+member/member_mng+.jsp
